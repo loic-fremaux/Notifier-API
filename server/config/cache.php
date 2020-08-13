@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Str;
+
 return [
 
     /*
@@ -29,7 +31,7 @@ return [
     */
 
     'stores' => [
-
+/*
         'apc' => [
             'driver' => 'apc',
         ],
@@ -43,12 +45,12 @@ return [
             'table' => 'cache',
             'connection' => null,
         ],
-
+*/
         'file' => [
             'driver' => 'file',
             'path' => storage_path('framework/cache/data'),
         ],
-
+/*
         'memcached' => [
             'driver' => 'memcached',
             'persistent_id' => env('MEMCACHED_PERSISTENT_ID'),
@@ -72,7 +74,10 @@ return [
             'driver' => 'redis',
             'connection' => 'default',
         ],
-
+*/
+        'none' => [
+            'driver' => 'null',
+        ],
     ],
 
     /*
@@ -88,7 +93,7 @@ return [
 
     'prefix' => env(
         'CACHE_PREFIX',
-        str_slug(env('APP_NAME', 'laravel'), '_').'_cache'
+        Str::slug(env('APP_NAME', 'laravel'), '_').'_cache'
     ),
 
 ];
