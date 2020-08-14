@@ -108,6 +108,8 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+    'firebase_server_key' => env('FIREBASE_SERVER_KEY'),
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

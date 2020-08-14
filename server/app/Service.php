@@ -32,6 +32,11 @@ class Service extends Model
         return Service::where('slug', $input)->first();
     }
 
+    public static function fromApiKey($input)
+    {
+        return Service::where('api_key', $input)->first();
+    }
+
     public static function store(Request $request)
     {
         // Validate the request...
