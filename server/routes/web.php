@@ -11,6 +11,8 @@
 |
 */
 
+use App\Http\Controllers\ServiceController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -39,4 +41,14 @@ Auth::routes();
 Route::middleware(['auth', '2fa'])->group(function () {
     Route::get('/panel', 'PanelController@index')->name('panel');
     Route::post('/panel/create', 'ServiceController@create')->name('panel.create');
+    Route::get('/panel/delete/{id}', function (App\Service $id) {
+        $id->delete();
+        return redirect('panel');
+    })->name('panel.delete');
+    Route::post('/panel/adduser/{id}', function (App\Service $id, Request $request) {
+       return ServiceController::addUser($id, $request);
+    })->name('panel.adduser');
+    Route::post('/panel/deluser/{service_id}/{user_id}', function (App\Service $service_id, $user_id, Request $request) {
+        return ServiceController::delUser($service_id, $user_id);
+    })->name('panel.deluser');
 });

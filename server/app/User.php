@@ -57,4 +57,19 @@ class User extends Authenticatable
     {
         return decrypt($value);
     }
+
+    public function services()
+    {
+        return $this->belongsToMany('App\Service', 'service_members', 'user_id', 'service_id');
+    }
+
+    public static function fromName($username): ?User
+    {
+        return User::where('name', $username)->first();
+    }
+
+    public static function fromId($input)
+    {
+        return User::where('id', $input)->first();
+    }
 }

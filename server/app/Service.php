@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class Service extends Model
 {
@@ -13,29 +15,74 @@ class Service extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'slug', 'owner_id',
+        'id', 'name', 'slug', 'user_id', 'api_key',
     ];
 
-    public static function fromUser(int $userId)
-    {
-        return Service::where('owner_id', $userId)->get();
-    }
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'api_key'
+    ];
 
     public static function fromSlug(string $input)
     {
         return Service::where('slug', $input)->first();
     }
 
-    public function store(Request $request)
+    public static function store(Request $request)
     {
         // Validate the request...
+        $userId = Auth::guard()->user()->getAuthIdentifier();
 
         $service = new Service;
 
         $service->name = $request->name;
         $service->slug = $request->slug;
-        $service->owner_id = $request->owner_id;
+        $service->user_id = $userId;
+        $service->api_key = Str::random(80);
 
         $service->save();
+        $service->refresh();
+        $service->users()->attach([
+            'user_id' => $userId
+        ]);
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany('App\User', 'service_members', 'service_id', 'user_id');
+    }
+
+    public function addUser(User $newUser)
+    {
+        foreach ($this->users()->get() as $user) {
+            if ($newUser->id === $user->id) {
+                return false;
+            }
+        }
+
+        $this->users()->attach([
+            'user_id' => $newUser->id
+        ]);
+        $this->refresh();
+        return true;
+    }
+
+    public function delUser(User $targetUser)
+    {
+        foreach ($this->users()->get() as $user) {
+            if ($targetUser->id === $user->id) {
+                $this->users()->detach([
+                    'user_id' => $targetUser->id
+                ]);
+                $this->refresh();
+                return true;
+            }
+        }
+
+        return false;
     }
 }

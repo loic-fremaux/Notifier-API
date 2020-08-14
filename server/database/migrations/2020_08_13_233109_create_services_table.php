@@ -14,17 +14,27 @@ class CreateServicesTable extends Migration
     public function up()
     {
         Schema::create('services', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->timestamps();
-            $table->string('name');
-            $table->string('slug');
-            $table->string('owner_id');
+            $table->string('name', 60);
+            $table->string('slug', 60);
+            $table->string('api_key', 80);
+            $table->foreignId('user_id')
+                ->constrained('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         });
         Schema::create('service_members', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->integer('service_id');
-            $table->integer('user_id');
+            $table->foreignId('service_id')
+                ->constrained('services')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+            $table->foreignId('user_id')
+                ->constrained('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         });
     }
 

@@ -16,7 +16,6 @@ class PanelController extends Controller
      */
     public function index()
     {
-        $services = Service::fromUser(Auth::guard()->user()->getAuthIdentifier());
-        return view('panel.panel', ['services' => $services]);
+        return view('panel.panel', ['services' => Auth::guard()->user()->services()->get()]);
     }
 }

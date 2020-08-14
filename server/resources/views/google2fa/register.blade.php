@@ -2,19 +2,19 @@
 
 @section('content')
     <div class="container">
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Set up Google Authenticator</div>
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">Mise en place de l'authentification à 2 facteurs</div>
 
                     <div class="panel-body" style="text-align: center;">
-                        <p>Set up your two factor authentication by scanning the barcode below. Alternatively, you can use the code {{ $secret }}</p>
+                        <p>Flashez le QR code ci-dessous ou utilisez le code suivant : {{ $secret }}</p>
                         <div>
                             <img src="{{ $QR_Image }}">
                         </div>
-                        <p>You must set up your Google Authenticator app before continuing. You will be unable to login otherwise</p>
+                        <p>L'authentification à 2 facteurs est requise pour finaliser la création de votre compte.</p>
                         <div>
-                            <a href="/complete-registration"><button class="btn-primary">Complete Registration</button></a>
+                            <a href="{{ url('/complete-registration') }}"><button class="btn btn-primary">Créer mon compte</button></a>
                         </div>
                     </div>
                 </div>
