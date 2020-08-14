@@ -11,21 +11,28 @@
 |
 */
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/', function () {
     return view('home', ['page' => 'Accueil']);
 });
+
+Route::get('/home', 'HomeController@index')
+    ->name('home');
+
 Route::get('/login', function () {
-    return view('user.login', ['page' => 'Connexion']);
+    return view('user.login');
 })->name('login');
 Route::get('/register', function () {
-    return view('user.register', ['page' => 'Créer un compte']);
+    return view('user.register');
 })->name('register');
-Route::middleware('auth')->get('/panel', function () {
 
-})->name('panel');
-Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Auth::routes();
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/panel', 'PanelController@index')->name('panel');
+    Route::post('/panel/create', 'ServiceController@create')->name('panel.create');
+});
