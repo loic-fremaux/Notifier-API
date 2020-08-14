@@ -27,12 +27,16 @@ Route::get('/login', function () {
 Route::get('/register', function () {
     return view('user.register');
 })->name('register');
+Route::get('/complete-registration', 'Auth\RegisterController@completeRegistration');
+Route::post('/2fa', function () {
+    return redirect('panel');
+})->name('2fa')->middleware('2fa');
 
 
 Route::get('/home', 'HomeController@index')->name('home');
 Auth::routes();
 
-Route::group(['middleware' => 'auth'], function () {
+Route::middleware(['auth', '2fa'])->group(function () {
     Route::get('/panel', 'PanelController@index')->name('panel');
     Route::post('/panel/create', 'ServiceController@create')->name('panel.create');
 });
