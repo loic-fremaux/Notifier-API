@@ -54,10 +54,9 @@ class ApiServiceController extends Controller
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
 
-        curl_exec($ch);
-
         return response()->json([
-            'status' => 'Notification sent !'
+            'status' => 'Notification sent !',
+            'returned' => curl_exec($ch),
         ], 200);
 
     }
