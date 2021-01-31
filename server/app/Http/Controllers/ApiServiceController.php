@@ -36,7 +36,7 @@ class ApiServiceController extends Controller
                 [
                     "title" => $request->input('title'),
                     "body" => $request->input('body'),
-                    "icon" => url('/logo.png')
+                    "icon" => $request->input('icon')
                 ],
         ];
         $dataString = json_encode($data);
