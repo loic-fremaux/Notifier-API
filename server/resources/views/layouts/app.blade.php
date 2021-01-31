@@ -85,6 +85,9 @@
 
     <main class="py-4">
         @include('layouts.notifications')
+        @auth
+            <span>api_token: {{ Auth::user()->api_token }}</span>
+        @endauth
         @yield('content')
     </main>
 </div>
